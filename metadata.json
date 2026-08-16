@@ -1,0 +1,6 @@
+{
+  "name": "NanoPixel",
+  "description": "AI-powered navigation-error recovery system for semiconductor wafer inspection (SEMICON India Hackathon 2026 / Applied Materials Track).",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
