@@ -144,6 +144,8 @@ export default function App() {
       return;
     }
 
+    let isCurrent = true;
+
     // Set the selected sample to the current demo sample
     setSelectedId(demoSampleIndex);
 
@@ -173,16 +175,20 @@ export default function App() {
       utterance.pitch = 1.05;
 
       utterance.onend = () => {
+        if (!isCurrent) return;
         // Hold for 1.8 seconds after speech completes, then advance
         speechTimeoutRef.current = setTimeout(() => {
-          advanceDemo();
+          if (!isCurrent) return;
+          advanceDemo(demoSampleIndex, demoStepIndex);
         }, 1800);
       };
 
       utterance.onerror = () => {
+        if (!isCurrent) return;
         // Fallback if SpeechSynthesis encounters an error
         speechTimeoutRef.current = setTimeout(() => {
-          advanceDemo();
+          if (!isCurrent) return;
+          advanceDemo(demoSampleIndex, demoStepIndex);
         }, 6000);
       };
 
@@ -190,38 +196,34 @@ export default function App() {
     } else {
       // Fallback timer if muted or SpeechSynthesis is not supported
       speechTimeoutRef.current = setTimeout(() => {
-        advanceDemo();
+        if (!isCurrent) return;
+        advanceDemo(demoSampleIndex, demoStepIndex);
       }, 7000);
     }
 
     return () => {
+      isCurrent = false;
       if (speechTimeoutRef.current) {
         clearTimeout(speechTimeoutRef.current);
       }
     };
   }, [isDemoActive, demoSampleIndex, demoStepIndex, speechMuted, voices]);
 
-  const advanceDemo = () => {
-    setDemoStepIndex((prevStep) => {
-      if (prevStep < 4) {
-        return prevStep + 1;
+  const advanceDemo = (currentSampleIdx: number, currentStepIdx: number) => {
+    if (currentStepIdx < 4) {
+      setDemoStepIndex(currentStepIdx + 1);
+    } else {
+      if (currentSampleIdx < results.length - 1) {
+        setDemoStepIndex(0);
+        setDemoSampleIndex(currentSampleIdx + 1);
       } else {
-        // Loop back to step 0 and increment sample
-        setDemoSampleIndex((prevSample) => {
-          if (prevSample < results.length - 1) {
-            setDemoStepIndex(0);
-            return prevSample + 1;
-          } else {
-            // End of demo presentation
-            setIsDemoActive(false);
-            setHighlightedSection(null);
-            setDemoStepIndex(0);
-            return 0;
-          }
-        });
-        return prevStep;
+        // End of demo presentation - STOP, do not loop
+        setIsDemoActive(false);
+        setHighlightedSection(null);
+        setDemoStepIndex(0);
+        setDemoSampleIndex(0);
       }
-    });
+    }
   };
 
   const getTourSteps = (sample: SampleResult) => [
