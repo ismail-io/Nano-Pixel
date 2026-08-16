@@ -213,16 +213,10 @@ export default function App() {
     if (currentStepIdx < 4) {
       setDemoStepIndex(currentStepIdx + 1);
     } else {
-      if (currentSampleIdx < results.length - 1) {
-        setDemoStepIndex(0);
-        setDemoSampleIndex(currentSampleIdx + 1);
-      } else {
-        // End of demo presentation - STOP, do not loop
-        setIsDemoActive(false);
-        setHighlightedSection(null);
-        setDemoStepIndex(0);
-        setDemoSampleIndex(0);
-      }
+      // End of demo presentation for current sample - STOP!
+      setIsDemoActive(false);
+      setHighlightedSection(null);
+      setDemoStepIndex(0);
     }
   };
 
@@ -284,7 +278,7 @@ export default function App() {
         window.speechSynthesis.cancel();
       }
     } else {
-      setDemoSampleIndex(0);
+      setDemoSampleIndex(selectedId);
       setDemoStepIndex(0);
       setIsDemoActive(true);
     }
