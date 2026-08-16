@@ -402,7 +402,7 @@ export default function App() {
                   {/* Thumbnail of Reference image */}
                   <div className="w-12 h-12 rounded bg-slate-900 border border-slate-800 overflow-hidden shrink-0 flex items-center justify-center p-0.5">
                     <img 
-                      src={`/${sample.reference_image}`} 
+                      src={`${import.meta.env.BASE_URL}${sample.reference_image}`} 
                       alt={`Ref ${sample.id}`}
                       className="w-full h-full object-cover grayscale opacity-80 group-hover:opacity-100 transition-opacity" 
                     />
@@ -570,7 +570,7 @@ export default function App() {
                   {/* Image container */}
                   <div className="relative w-full h-full bg-black border border-slate-850 rounded flex items-center justify-center overflow-hidden">
                     <img 
-                      src={`/${currentSample.reference_image}`} 
+                      src={`${import.meta.env.BASE_URL}${currentSample.reference_image}`} 
                       alt={`Reference ${currentSample.id}`}
                       className="w-full h-full object-contain grayscale scale-100 group-hover:scale-105 transition-transform duration-200" 
                     />
@@ -619,7 +619,7 @@ export default function App() {
 
                   {/* Main search PNG */}
                   <img 
-                    src={`/${currentSample.search_image}`} 
+                    src={`${import.meta.env.BASE_URL}${currentSample.search_image}`} 
                     alt={`Search Area ${currentSample.id}`}
                     className="w-full h-auto block grayscale contrast-125 select-none" 
                   />
